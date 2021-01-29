@@ -21,6 +21,7 @@ print(p1.__dict__)
 print(dir(p1))
 print(p1.__dir__())
 '''
+
 from types import MethodType
 
 class Student():
@@ -59,7 +60,7 @@ print('-*'*20)
 # print(k.get_score()) 
 
 
-# NOTE：2. MethodType绑定到实例，成为一个实例方法，自动传入实例作为self，不会影响其他实例
+# NOTE：2. MethodType绑定到实例，注册成为一个实例方法，自动传入实例作为self，不会影响其他实例
 # j.get_score = MethodType(outside_get, j)
 # print(j.get_score())
 
@@ -68,16 +69,17 @@ print('-*'*20)
 
 
 # NOTE： 3. 动态绑定到类的实例方法，会覆盖已有的同名的实例方法,所有实例都可以继承，包括已经实例化的实例
-# Student.get_score = outside_get
+Student.get_score = outside_get
+print(j.get_score()) # 仍然是实例方法，不过原方法被覆盖了
+
+k = Student('kk', 88)
+print(k.get_score()) 
+
+
+# NOTE： 4. MethodType绑定到类相当于动态绑定到类方法，即使是实例调用，实际传入self的是class而不是实例（实例调用就相当于实例调用类方法）
+# Student.get_score = MethodType(outside_get, Student)
 # print(j.get_score())
 
 # k = Student('kk', 88)
 # print(k.get_score()) 
 
-
-# NOTE： 4. MethodType绑定到类相当于动态绑定到类方法，即使是实例调用，实际传入self的是class而不是实例
-Student.get_score = MethodType(outside_get, Student)
-print(j.get_score())
-
-k = Student('kk', 88)
-print(k.get_score()) 
